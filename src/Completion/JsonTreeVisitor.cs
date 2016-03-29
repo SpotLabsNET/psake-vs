@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using Microsoft.CSS.Core;
-using Microsoft.JSON.Core.Parser;
-using Microsoft.CSS.Core.Parser;
-
-namespace CommandTaskRunner
+﻿namespace PSake.TaskRunner.Completion
 {
+    using System.Collections.Generic;
+
+    using Microsoft.CSS.Core.Parser;
+    using Microsoft.JSON.Core.Parser;
+
     internal class JSONItemCollector<T> : IJSONSimpleTreeVisitor where T : JSONParseItem
     {
         public IList<T> Items { get; private set; }
@@ -14,8 +14,8 @@ namespace CommandTaskRunner
 
         public JSONItemCollector(bool includeChildren)
         {
-            _includeChildren = includeChildren;
-            Items = new List<T>();
+            this._includeChildren = includeChildren;
+            this.Items = new List<T>();
         }
 
         public VisitItemResult Visit(JSONParseItem parseItem)
@@ -24,8 +24,8 @@ namespace CommandTaskRunner
 
             if (item != null)
             {
-                Items.Add(item);
-                return (_includeChildren) ? VisitItemResult.Continue : VisitItemResult.SkipChildren;
+                this.Items.Add(item);
+                return (this._includeChildren) ? VisitItemResult.Continue : VisitItemResult.SkipChildren;
             }
 
             return VisitItemResult.Continue;

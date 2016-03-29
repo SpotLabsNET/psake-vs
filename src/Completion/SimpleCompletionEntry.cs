@@ -1,10 +1,11 @@
-﻿using System.Windows.Media;
-using Microsoft.JSON.Editor.Completion;
-using Microsoft.VisualStudio.Language.Intellisense;
-using Microsoft.Web.Editor.Imaging;
-
-namespace CommandTaskRunner
+﻿namespace PSake.TaskRunner.Completion
 {
+    using System.Windows.Media;
+
+    using Microsoft.JSON.Editor.Completion;
+    using Microsoft.VisualStudio.Language.Intellisense;
+    using Microsoft.Web.Editor.Imaging;
+
     class SimpleCompletionEntry : JSONCompletionEntry
     {
         private static ImageSource _glyph = GlyphService.GetGlyph(StandardGlyphGroup.GlyphGroupVariable, StandardGlyphItem.GlyphItemPublic);

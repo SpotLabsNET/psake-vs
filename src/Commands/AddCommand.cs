@@ -1,17 +1,24 @@
-﻿using System;
-using System.ComponentModel.Design;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using EnvDTE;
-using EnvDTE80;
-using Microsoft.VisualStudio.Shell;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-namespace CommandTaskRunner
+﻿namespace PSake.TaskRunner.Commands
 {
+    using System;
+    using System.ComponentModel.Design;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+    using System.Windows;
+
+    using EnvDTE;
+
+    using EnvDTE80;
+
+    using Microsoft.VisualStudio.Shell;
+
+    using Newtonsoft.Json.Linq;
+
+    using PSake.TaskRunner.Helpers;
+
+    using Constants = PSake.TaskRunner.Constants;
+
     internal sealed class AddCommand
     {
         private readonly Package package;
@@ -26,12 +33,12 @@ namespace CommandTaskRunner
 
             this.package = package;
 
-            OleMenuCommandService commandService = ServiceProvider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
+            OleMenuCommandService commandService = this.ServiceProvider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (commandService != null)
             {
-                var cmdAddCommand = new CommandID(GuidList.guidCommandCmdSet, PackageCommands.AddCommandId);
-                var addCommandItem = new OleMenuCommand(AddCommandToFile, cmdAddCommand);
-                addCommandItem.BeforeQueryStatus += BeforeQueryStatus;
+                var cmdAddCommand = new CommandID(PackageGuids.guidCommandCmdSet, PackageIds.AddCommandId);
+                var addCommandItem = new OleMenuCommand(this.AddCommandToFile, cmdAddCommand);
+                addCommandItem.BeforeQueryStatus += this.BeforeQueryStatus;
                 commandService.AddCommand(addCommandItem);
             }
         }
@@ -92,7 +99,7 @@ namespace CommandTaskRunner
                 VSPackage._dte.ExecuteCommand("SolutionExplorer.SyncWithActiveDocument");
             }
 
-            OpenTaskRunnerExplorer();
+            this.OpenTaskRunnerExplorer();
             VSPackage._dte.StatusBar.Text = $"File successfully added to {Constants.FILENAME}";
         }
 

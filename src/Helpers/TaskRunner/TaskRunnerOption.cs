@@ -1,18 +1,19 @@
-﻿using System;
-using Microsoft.VisualStudio.TaskRunnerExplorer;
-
-namespace ProjectTaskRunner.Helpers
+﻿namespace PSake.TaskRunner.Helpers.TaskRunner
 {
+    using System;
+
+    using Microsoft.VisualStudio.TaskRunnerExplorer;
+
     public class TaskRunnerOption : ITaskRunnerOption
     {
         public TaskRunnerOption(string optionName, uint commandId, Guid commandGroup, bool isEnabled, string command)
         {
-            Command = command;
-            Id = commandId;
-            Guid = commandGroup;
-            Name = optionName;
-            Enabled = isEnabled;
-            Checked = isEnabled;
+            this.Command = command;
+            this.Id = commandId;
+            this.Guid = commandGroup;
+            this.Name = optionName;
+            this.Enabled = isEnabled;
+            this.Checked = isEnabled;
         }
 
         public string Command { get; set; }

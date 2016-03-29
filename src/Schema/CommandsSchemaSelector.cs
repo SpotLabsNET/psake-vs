@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using Microsoft.JSON.Core.Schema;
-
-namespace CommandTaskRunner
+﻿namespace PSake.TaskRunner.Schema
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.Composition;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+    using System.Threading.Tasks;
+
+    using Microsoft.JSON.Core.Schema;
+
     [Export(typeof(IJSONSchemaSelector))]
     class CommandSchemaSelector : IJSONSchemaSelector
     {

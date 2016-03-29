@@ -1,12 +1,13 @@
-namespace CommandTaskRunner
+namespace PSake.TaskRunner
 {
-	static class Vsix
-	{
-		public const string Id = "fc1aafb2-321e-41bd-ac37-03b09ea8ef31";
-		public const string Name = "Command Task Runner";
-		public const string Description = "Adds support for command line batch files in Visual Studio 2015's Task Runner Explorer. Supports .cmd, .bat, .ps1 and .psm1 files.";
-		public const string Version = "1.1";
-		public const string Author = "Mads Kristensen";
-		public const string Tags = "command-line, PowerShell, cmd, batch, bat";
-	}
+    static class Vsix
+    {
+        public const string Id = "6414b91b-1722-4740-9788-81c83ad89362";
+        public const string Name = "PSake Task Runner";
+        public const string Description = "Adds support for PSake tasks in Visual Studio 2015's Task Runner Explorer.";
+        public const string Language = "en-US";
+        public const string Version = "0.3";
+        public const string Author = "SpotLabs, LLC";
+        public const string Tags = "PowerShell, PSake";
+    }
 }

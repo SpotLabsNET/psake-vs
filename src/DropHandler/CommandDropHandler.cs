@@ -1,13 +1,16 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.IO;
-using System.Windows;
-using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.Text.Editor.DragDrop;
-
-namespace CommandTaskRunner
+﻿namespace PSake.TaskRunner.DropHandler
 {
+    using System;
+    using System.Collections.Specialized;
+    using System.IO;
+    using System.Windows;
+
+    using Microsoft.VisualStudio.Text;
+    using Microsoft.VisualStudio.Text.Editor;
+    using Microsoft.VisualStudio.Text.Editor.DragDrop;
+
+    using PSake.TaskRunner.Helpers;
+
     public class CommandDropHandler : IDropHandler
     {
         private readonly ITextDocumentFactoryService _documentFactory;
@@ -16,22 +19,22 @@ namespace CommandTaskRunner
 
         public CommandDropHandler(ITextDocumentFactoryService documentFactory, IWpfTextView view)
         {
-            _documentFactory = documentFactory;
-            _view = view;
+            this._documentFactory = documentFactory;
+            this._view = view;
         }
 
         public DragDropPointerEffects HandleDataDropped(DragDropInfo dragDropInfo)
         {
             ITextDocument document;
 
-            if (!_documentFactory.TryGetTextDocument(_view.TextDataModel.DocumentBuffer, out document))
+            if (!this._documentFactory.TryGetTextDocument(this._view.TextDataModel.DocumentBuffer, out document))
                 return DragDropPointerEffects.None;
 
-            var snapshot = _view.TextBuffer.CurrentSnapshot;
+            var snapshot = this._view.TextBuffer.CurrentSnapshot;
             string bufferContent = snapshot.GetText();
-            var json = CommandHelpers.GetJsonContent(document.FilePath, _fileName, bufferContent);
+            var json = CommandHelpers.GetJsonContent(document.FilePath, this._fileName, bufferContent);
 
-            using (var edit = _view.TextBuffer.CreateEdit())
+            using (var edit = this._view.TextBuffer.CreateEdit())
             {
                 edit.Replace(0, snapshot.Length, json.ToString());
                 edit.Apply();
@@ -46,9 +49,9 @@ namespace CommandTaskRunner
 
         public bool IsDropEnabled(DragDropInfo dragDropInfo)
         {
-            _fileName = GetImageFilename(dragDropInfo);
+            this._fileName = GetImageFilename(dragDropInfo);
 
-            if (string.IsNullOrEmpty(_fileName) || !CommandHelpers.IsFileSupported(_fileName) || VSPackage._dte.ActiveDocument == null)
+            if (string.IsNullOrEmpty(this._fileName) || !CommandHelpers.IsFileSupported(this._fileName) || VSPackage._dte.ActiveDocument == null)
                 return false;
 
             string activeFile = Path.GetFileName(VSPackage._dte.ActiveDocument.FullName);

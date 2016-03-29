@@ -1,11 +1,12 @@
-﻿using System.ComponentModel.Composition;
-using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.Text.Editor.DragDrop;
-using Microsoft.VisualStudio.Utilities;
-
-namespace CommandTaskRunner
+﻿namespace PSake.TaskRunner.DropHandler
 {
+    using System.ComponentModel.Composition;
+
+    using Microsoft.VisualStudio.Text;
+    using Microsoft.VisualStudio.Text.Editor;
+    using Microsoft.VisualStudio.Text.Editor.DragDrop;
+    using Microsoft.VisualStudio.Utilities;
+
     [Export(typeof(IDropHandlerProvider))]
     [DropFormat("FileDrop")]
     [DropFormat("CF_VSSTGPROJECTITEMS")]
@@ -20,7 +21,7 @@ namespace CommandTaskRunner
 
         public IDropHandler GetAssociatedDropHandler(IWpfTextView wpfTextView)
         {
-            return wpfTextView.Properties.GetOrCreateSingletonProperty(() => new CommandDropHandler(TextDocumentFactoryService, wpfTextView));
+            return wpfTextView.Properties.GetOrCreateSingletonProperty(() => new CommandDropHandler(this.TextDocumentFactoryService, wpfTextView));
         }
     }
 }

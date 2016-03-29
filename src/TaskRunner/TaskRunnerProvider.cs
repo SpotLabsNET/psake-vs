@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using Microsoft.VisualStudio.TaskRunnerExplorer;
-using ProjectTaskRunner.Helpers;
-
-namespace CommandTaskRunner
+﻿namespace PSake.TaskRunner.TaskRunner
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
+
+    using Microsoft.VisualStudio.TaskRunnerExplorer;
+
+    using PSake.TaskRunner.Helpers.TaskRunner;
+
     internal class TrimmingStringComparer : IEqualityComparer<string>
     {
         private char _toTrim;
@@ -22,21 +24,21 @@ namespace CommandTaskRunner
 
         public TrimmingStringComparer(char toTrim, IEqualityComparer<string> basisComparer)
         {
-            _toTrim = toTrim;
-            _basisComparison = basisComparer;
+            this._toTrim = toTrim;
+            this._basisComparison = basisComparer;
         }
 
         public bool Equals(string x, string y)
         {
-            string realX = x?.TrimEnd(_toTrim);
-            string realY = y?.TrimEnd(_toTrim);
-            return _basisComparison.Equals(realX, realY);
+            string realX = x?.TrimEnd(this._toTrim);
+            string realY = y?.TrimEnd(this._toTrim);
+            return this._basisComparison.Equals(realX, realY);
         }
 
         public int GetHashCode(string obj)
         {
-            string realObj = obj?.TrimEnd(_toTrim);
-            return realObj != null ? _basisComparison.GetHashCode(realObj) : 0;
+            string realObj = obj?.TrimEnd(this._toTrim);
+            return realObj != null ? this._basisComparison.GetHashCode(realObj) : 0;
         }
     }
 
@@ -48,19 +50,19 @@ namespace CommandTaskRunner
 
         public void SetDynamicTaskName(string dynamicName)
         {
-            _dynamicNames.Remove(dynamicName);
-            _dynamicNames.Add(dynamicName);
+            this._dynamicNames.Remove(dynamicName);
+            this._dynamicNames.Add(dynamicName);
         }
 
         public string GetDynamicName(string name)
         {
             IEqualityComparer<string> comparer = new TrimmingStringComparer('\u200B');
-            return _dynamicNames.FirstOrDefault(x => comparer.Equals(name, x));
+            return this._dynamicNames.FirstOrDefault(x => comparer.Equals(name, x));
         }
 
         public TaskRunnerProvider()
         {
-            _icon = new BitmapImage(new Uri(@"pack://application:,,,/CommandTaskRunner;component/Resources/project.png"));
+            this._icon = new BitmapImage(new Uri(@"pack://application:,,,/CommandTaskRunner;component/Resources/project.png"));
         }
 
         public List<ITaskRunnerOption> Options
@@ -72,14 +74,14 @@ namespace CommandTaskRunner
         {
             return await Task.Run(() =>
             {
-                ITaskRunnerNode hierarchy = LoadHierarchy(configPath);
+                ITaskRunnerNode hierarchy = this.LoadHierarchy(configPath);
 
                 if (!hierarchy.Children.Any() && !hierarchy.Children.First().Children.Any())
                     return null;
 
                 Telemetry.TrackEvent("Tasks loaded");
 
-                return new TaskRunnerConfig(this, context, hierarchy, _icon);
+                return new TaskRunnerConfig(this, context, hierarchy, this._icon);
             });
         }
 
@@ -102,7 +104,7 @@ namespace CommandTaskRunner
 
                 // Add zero width space
                 string commandName = command.Name += "\u200B";
-                SetDynamicTaskName(commandName);
+                this.SetDynamicTaskName(commandName);
 
                 TaskRunnerNode task = new TaskRunnerNode(commandName, true)
                 {

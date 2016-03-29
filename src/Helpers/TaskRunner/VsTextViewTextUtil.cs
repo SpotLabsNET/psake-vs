@@ -1,14 +1,16 @@
-﻿using System;
-using System.Text;
-using EnvDTE;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.OLE.Interop;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.TextManager.Interop;
-
-namespace ProjectTaskRunner.Helpers
+﻿namespace PSake.TaskRunner.Helpers.TaskRunner
 {
+    using System;
+    using System.Text;
+
+    using EnvDTE;
+
+    using Microsoft.VisualStudio;
+    using Microsoft.VisualStudio.OLE.Interop;
+    using Microsoft.VisualStudio.Shell;
+    using Microsoft.VisualStudio.Shell.Interop;
+    using Microsoft.VisualStudio.TextManager.Interop;
+
     internal class VsTextViewTextUtil : ITextUtil
     {
         private int _currentLineLength;
@@ -17,19 +19,19 @@ namespace ProjectTaskRunner.Helpers
 
         public VsTextViewTextUtil(IVsTextView view)
         {
-            _view = view;
+            this._view = view;
         }
 
         public Range CurrentLineRange
         {
-            get { return new Range { LineNumber = _lineNumber, LineRange = new LineRange { Start = 0, Length = _currentLineLength } }; }
+            get { return new Range { LineNumber = this._lineNumber, LineRange = new LineRange { Start = 0, Length = this._currentLineLength } }; }
         }
 
         public bool Delete(Range range)
         {
             try
             {
-                GetEditPointForRange(range)?.Delete(range.LineRange.Length);
+                this.GetEditPointForRange(range)?.Delete(range.LineRange.Length);
                 return true;
             }
             catch
@@ -42,7 +44,7 @@ namespace ProjectTaskRunner.Helpers
         {
             try
             {
-                GetEditPointForRange(position)?.Insert(text + (addNewline ? Environment.NewLine : string.Empty));
+                this.GetEditPointForRange(position)?.Insert(text + (addNewline ? Environment.NewLine : string.Empty));
                 return true;
             }
             catch
@@ -54,7 +56,7 @@ namespace ProjectTaskRunner.Helpers
         public bool TryReadLine(out string line)
         {
             IVsTextLines textLines;
-            int hr = _view.GetBuffer(out textLines);
+            int hr = this._view.GetBuffer(out textLines);
 
             if (hr != VSConstants.S_OK || textLines == null)
             {
@@ -65,14 +67,14 @@ namespace ProjectTaskRunner.Helpers
             int lineCount;
             hr = textLines.GetLineCount(out lineCount);
 
-            if (hr != VSConstants.S_OK || _lineNumber == lineCount)
+            if (hr != VSConstants.S_OK || this._lineNumber == lineCount)
             {
                 line = null;
                 return false;
             }
 
-            int lineNumber = _lineNumber++;
-            hr = textLines.GetLengthOfLine(lineNumber, out _currentLineLength);
+            int lineNumber = this._lineNumber++;
+            hr = textLines.GetLengthOfLine(lineNumber, out this._currentLineLength);
 
             if(hr != VSConstants.S_OK)
             {
@@ -80,7 +82,7 @@ namespace ProjectTaskRunner.Helpers
                 return false;
             }
 
-            hr = textLines.GetLineText(lineNumber, 0, lineNumber, _currentLineLength, out line);
+            hr = textLines.GetLineText(lineNumber, 0, lineNumber, this._currentLineLength, out line);
 
             if (hr != VSConstants.S_OK)
             {
@@ -102,7 +104,7 @@ namespace ProjectTaskRunner.Helpers
         {
             StringBuilder text = new StringBuilder();
             string line;
-            while (TryReadLine(out line))
+            while (this.TryReadLine(out line))
             {
                 text.Append(line);
             }
@@ -111,14 +113,14 @@ namespace ProjectTaskRunner.Helpers
 
         public void Reset()
         {
-            _currentLineLength = 0;
-            _lineNumber = 0;
+            this._currentLineLength = 0;
+            this._lineNumber = 0;
         }
 
         private EditPoint GetEditPointForRange(Range range)
         {
             IVsTextLines textLines;
-            int hr = _view.GetBuffer(out textLines);
+            int hr = this._view.GetBuffer(out textLines);
 
             if (hr != VSConstants.S_OK || textLines == null)
             {
@@ -139,18 +141,18 @@ namespace ProjectTaskRunner.Helpers
 
         public void FormatRange(LineRange range)
         {
-            Reset();
+            this.Reset();
             int startLine, startLineOffset, endLine, endLineOffset;
             this.GetExtentInfo(range.Start, range.Length, out startLine, out startLineOffset, out endLine, out endLineOffset);
 
             int oldStartLine, oldStartLineOffset, oldEndLine, oldEndLineOffset;
-            _view.GetSelection(out oldStartLine, out oldStartLineOffset, out oldEndLine, out oldEndLineOffset);
-            _view.SetSelection(startLine, startLineOffset, endLine, endLineOffset);
+            this._view.GetSelection(out oldStartLine, out oldStartLineOffset, out oldEndLine, out oldEndLineOffset);
+            this._view.SetSelection(startLine, startLineOffset, endLine, endLineOffset);
             IOleCommandTarget target = (IOleCommandTarget) ServiceProvider.GlobalProvider.GetService(typeof (SUIHostCommandDispatcher));
             Guid cmdid = VSConstants.VSStd2K;
-            int hr = _view.SendExplicitFocus();
+            int hr = this._view.SendExplicitFocus();
             hr = target.Exec(ref cmdid, (uint) VSConstants.VSStd2KCmdID.FORMATSELECTION, 0, IntPtr.Zero, IntPtr.Zero);
-            _view.SetSelection(oldStartLine, oldStartLineOffset, oldEndLine, oldEndLineOffset);
+            this._view.SetSelection(oldStartLine, oldStartLineOffset, oldEndLine, oldEndLineOffset);
         }
     }
 }

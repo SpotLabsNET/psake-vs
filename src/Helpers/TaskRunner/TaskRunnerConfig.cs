@@ -1,9 +1,11 @@
-﻿using System.Windows.Media;
-using CommandTaskRunner;
-using Microsoft.VisualStudio.TaskRunnerExplorer;
-
-namespace ProjectTaskRunner.Helpers
+﻿namespace PSake.TaskRunner.Helpers.TaskRunner
 {
+    using System.Windows.Media;
+
+    using Microsoft.VisualStudio.TaskRunnerExplorer;
+
+    using PSake.TaskRunner.TaskRunner;
+
     internal class TaskRunnerConfig : TaskRunnerConfigBase
     {
         private ImageSource _rootNodeIcon;
@@ -16,12 +18,12 @@ namespace ProjectTaskRunner.Helpers
         public TaskRunnerConfig(TaskRunnerProvider provider, ITaskRunnerCommandContext context, ITaskRunnerNode hierarchy, ImageSource rootNodeIcon)
             : this(provider, context, hierarchy)
         {
-            _rootNodeIcon = rootNodeIcon;
+            this._rootNodeIcon = rootNodeIcon;
         }
 
         protected override ImageSource LoadRootNodeIcon()
         {
-            return _rootNodeIcon;
+            return this._rootNodeIcon;
         }
     }
 }

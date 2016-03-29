@@ -1,4 +1,4 @@
-﻿namespace ProjectTaskRunner.Helpers
+﻿namespace PSake.TaskRunner.Helpers.TaskRunner
 {
     public interface ITextUtil
     {

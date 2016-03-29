@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.IO;
-using System.Linq;
-using Microsoft.JSON.Core.Parser;
-using Microsoft.JSON.Core.Parser.TreeItems;
-using Microsoft.JSON.Editor.Completion;
-using Microsoft.VisualStudio.Language.Intellisense;
-using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.Utilities;
-
-namespace CommandTaskRunner
+﻿namespace PSake.TaskRunner.Completion
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.Composition;
+    using System.IO;
+    using System.Linq;
+
+    using Microsoft.JSON.Core.Parser;
+    using Microsoft.JSON.Core.Parser.TreeItems;
+    using Microsoft.JSON.Editor.Completion;
+    using Microsoft.VisualStudio.Language.Intellisense;
+    using Microsoft.VisualStudio.Text;
+    using Microsoft.VisualStudio.Utilities;
+
     [Export(typeof(IJSONCompletionListProvider))]
     [Name("CommandTaskCompletionProvider")]
     internal class TaskCompletionProvider : IJSONCompletionListProvider
@@ -27,7 +28,7 @@ namespace CommandTaskRunner
         public IEnumerable<JSONCompletionEntry> GetListEntries(JSONCompletionContext context)
         {
             ITextDocument document;
-            if (TextDocumentFactoryService.TryGetTextDocument(context.Snapshot.TextBuffer, out document))
+            if (this.TextDocumentFactoryService.TryGetTextDocument(context.Snapshot.TextBuffer, out document))
             {
                 string fileName = Path.GetFileName(document.FilePath).ToLowerInvariant();
 

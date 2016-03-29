@@ -1,58 +1,62 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+
 using Microsoft.VisualStudio.Shell.Interop;
 
-public static class Logger
+namespace PSake.TaskRunner
 {
-    private static IVsOutputWindowPane pane;
-    private static object _syncRoot = new object();
-    private static IServiceProvider _provider;
-    private static string _name;
-
-    public static void Initialize(IServiceProvider provider, string name)
+    public static class Logger
     {
-        _provider = provider;
-        _name = name;
-    }
+        private static IVsOutputWindowPane pane;
+        private static object _syncRoot = new object();
+        private static IServiceProvider _provider;
+        private static string _name;
 
-    [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Microsoft.VisualStudio.Shell.Interop.IVsOutputWindowPane.OutputString(System.String)")]
-    public static void Log(string message)
-    {
-        if (string.IsNullOrEmpty(message))
-            return;
-
-        try
+        public static void Initialize(IServiceProvider provider, string name)
         {
-            if (EnsurePane())
+            _provider = provider;
+            _name = name;
+        }
+
+        [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Microsoft.VisualStudio.Shell.Interop.IVsOutputWindowPane.OutputString(System.String)")]
+        public static void Log(string message)
+        {
+            if (string.IsNullOrEmpty(message))
+                return;
+
+            try
             {
-                pane.OutputString(DateTime.Now.ToString() + ": " + message + Environment.NewLine);
+                if (EnsurePane())
+                {
+                    pane.OutputString(DateTime.Now.ToString() + ": " + message + Environment.NewLine);
+                }
+            }
+            catch
+            {
+                // Do nothing
             }
         }
-        catch
-        {
-            // Do nothing
-        }
-    }
 
-    public static void Log(Exception ex)
-    {
-        if (ex != null)
+        public static void Log(Exception ex)
         {
-            Log(ex.ToString());
-            Telemetry.TrackException(ex);
-        }
-    }
-
-    private static bool EnsurePane()
-    {
-        if (pane == null)
-        {
-            Guid guid = Guid.NewGuid();
-            IVsOutputWindow output = (IVsOutputWindow)_provider.GetService(typeof(SVsOutputWindow));
-            output.CreatePane(ref guid, _name, 1, 1);
-            output.GetPane(ref guid, out pane);
+            if (ex != null)
+            {
+                Log(ex.ToString());
+                Telemetry.TrackException(ex);
+            }
         }
 
-        return pane != null;
+        private static bool EnsurePane()
+        {
+            if (pane == null)
+            {
+                Guid guid = Guid.NewGuid();
+                IVsOutputWindow output = (IVsOutputWindow)_provider.GetService(typeof(SVsOutputWindow));
+                output.CreatePane(ref guid, _name, 1, 1);
+                output.GetPane(ref guid, out pane);
+            }
+
+            return pane != null;
+        }
     }
 }

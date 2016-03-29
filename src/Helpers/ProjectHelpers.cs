@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using EnvDTE;
-using EnvDTE80;
-
-namespace CommandTaskRunner
+﻿namespace PSake.TaskRunner.Helpers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
+    using EnvDTE;
+
+    using EnvDTE80;
+
+    using Constants = PSake.TaskRunner.Constants;
+
     public static class ProjectHelpers
     {
         private static DTE2 _dte = VSPackage._dte;

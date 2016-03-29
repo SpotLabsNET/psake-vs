@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-namespace CommandTaskRunner
+﻿namespace PSake.TaskRunner.TaskRunner
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+
     class TaskParser
     {
         public static IEnumerable<CommandTask> LoadTasks(string configPath)

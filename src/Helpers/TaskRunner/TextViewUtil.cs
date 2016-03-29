@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.TextManager.Interop;
-
-namespace ProjectTaskRunner.Helpers
+﻿namespace PSake.TaskRunner.Helpers.TaskRunner
 {
+    using System;
+    using System.Collections.Generic;
+
+    using Microsoft.VisualStudio;
+    using Microsoft.VisualStudio.Shell;
+    using Microsoft.VisualStudio.Shell.Interop;
+    using Microsoft.VisualStudio.TextManager.Interop;
+
     public static class TextViewUtil
     {
         public static IVsTextView FindTextViewFor(string filePath)

@@ -1,5 +1,5 @@
 ﻿
-namespace CommandTaskRunner
+namespace PSake.TaskRunner
 {
     class Constants
     {

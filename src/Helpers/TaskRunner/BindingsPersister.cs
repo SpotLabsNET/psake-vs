@@ -1,21 +1,24 @@
-﻿using System;
-using System.Linq;
-using System.Xml.Linq;
-using CommandTaskRunner;
-using Microsoft.VisualStudio.TextManager.Interop;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-namespace ProjectTaskRunner.Helpers
+﻿namespace PSake.TaskRunner.Helpers.TaskRunner
 {
+    using System;
+    using System.Linq;
+    using System.Xml.Linq;
+
+    using Microsoft.VisualStudio.TextManager.Interop;
+
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+
+    using PSake.TaskRunner.TaskRunner;
+
     internal class BindingsPersister
     {
-        private const string BindingsName = CommandTaskRunner.Constants.ELEMENT_NAME;
+        private const string BindingsName = Constants.ELEMENT_NAME;
         private TaskRunnerProvider _provider;
 
         public BindingsPersister(TaskRunnerProvider provider)
         {
-            _provider = provider;
+            this._provider = provider;
         }
 
         public string Load(string configPath)
@@ -47,7 +50,7 @@ namespace ProjectTaskRunner.Helpers
 
                     for(int i = 0; i < tasks.Length; ++i)
                     {
-                        tasks[i] = _provider.GetDynamicName(tasks[i]);
+                        tasks[i] = this._provider.GetDynamicName(tasks[i]);
                     }
 
                     bindingsElement.SetAttributeValue(property.Name, string.Join(",", tasks));

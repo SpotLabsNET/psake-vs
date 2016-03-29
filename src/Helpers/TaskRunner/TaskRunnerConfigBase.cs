@@ -1,10 +1,12 @@
-﻿using System;
-using System.Windows.Media;
-using CommandTaskRunner;
-using Microsoft.VisualStudio.TaskRunnerExplorer;
-
-namespace ProjectTaskRunner.Helpers
+﻿namespace PSake.TaskRunner.Helpers.TaskRunner
 {
+    using System;
+    using System.Windows.Media;
+
+    using Microsoft.VisualStudio.TaskRunnerExplorer;
+
+    using PSake.TaskRunner.TaskRunner;
+
     internal abstract class TaskRunnerConfigBase : ITaskRunnerConfig
     {
         private static ImageSource SharedIcon;
@@ -13,21 +15,21 @@ namespace ProjectTaskRunner.Helpers
 
         protected TaskRunnerConfigBase(TaskRunnerProvider provider, ITaskRunnerCommandContext context, ITaskRunnerNode hierarchy)
         {
-            _bindingsPersister = new BindingsPersister(provider);
-            TaskHierarchy = hierarchy;
-            _context = context;
+            this._bindingsPersister = new BindingsPersister(provider);
+            this.TaskHierarchy = hierarchy;
+            this._context = context;
         }
 
         /// <summary>
         /// TaskRunner icon
         /// </summary>
-        public virtual ImageSource Icon => SharedIcon ?? (SharedIcon = LoadRootNodeIcon());
+        public virtual ImageSource Icon => SharedIcon ?? (SharedIcon = this.LoadRootNodeIcon());
 
         public ITaskRunnerNode TaskHierarchy { get; }
 
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
             GC.SuppressFinalize(this);
         }
 
@@ -35,7 +37,7 @@ namespace ProjectTaskRunner.Helpers
         {
             try
             {
-                return _bindingsPersister.Load(configPath);
+                return this._bindingsPersister.Load(configPath);
             }
             catch
             {
@@ -48,7 +50,7 @@ namespace ProjectTaskRunner.Helpers
             try
             {
                 Telemetry.TrackEvent("Updated bindings");
-                return _bindingsPersister.Save(configPath, bindingsXml);
+                return this._bindingsPersister.Save(configPath, bindingsXml);
             }
             catch
             {

@@ -1,11 +1,12 @@
-﻿using System;
-using System.Linq;
-using System.IO;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-namespace CommandTaskRunner
+﻿namespace PSake.TaskRunner.Helpers
 {
+    using System;
+    using System.IO;
+    using System.Linq;
+
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+
     class CommandHelpers
     {
         private static string[] _extensions = new[] { ".cmd", ".bat", ".ps1", ".psm1" };
